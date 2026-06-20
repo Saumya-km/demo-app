@@ -23,13 +23,24 @@
 
 #ENTRYPOINT ["java", "-jar", "app.jar"]
 
-FROM ubuntu:24.04
-RUN apt-get update && \
-    apt-get install -y wget
+FROM eclipse-temurin:21-jre
 
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y wget && \
+    rm -rf /var/lib/apt/lists/*
+
+# Nexus details passed during build
+ARG NEXUS_URL
+ARG APP_VERSION
+
+# Download JAR from Nexus
 RUN wget \
-  http://NEW_NEXUS:8081/repository/maven-releases/com/example/demo-app/1.0.0/demo-app-1.0.0.jar \
-  -O app.jar
+    "${NEXUS_URL}/repository/maven-releases/com/example/demo-app/${APP_VERSION}/demo-app-${APP_VERSION}.jar" \
+    -O app.jar
+
+EXPOSE 8082
 
 ENTRYPOINT ["java","-jar","app.jar"]
 
