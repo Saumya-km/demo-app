@@ -1,3 +1,6 @@
 spring:
   application:
     name: demo-app
+
+server:
+  port: 8082
