@@ -29,7 +29,7 @@ metadata:
 spec:
   type: LoadBalancer  
   selector:
-     app: demoapp-deployment
+     app: demoApp-deployment
   ports:
    - protocol: "TCP"
      port: 8082
