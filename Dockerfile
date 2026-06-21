@@ -27,20 +27,27 @@ FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
+# Install wget
 RUN apt-get update && \
     apt-get install -y wget && \
     rm -rf /var/lib/apt/lists/*
 
-# Nexus details passed during build
+# Build arguments
 ARG NEXUS_URL
+ARG REPOSITORY=maven-releases
+ARG GROUP_PATH=com/example
+ARG ARTIFACT=demo-app
 ARG APP_VERSION
 
-# Download JAR from Nexus
-RUN wget \
-    "${NEXUS_URL}/repository/maven-releases/com/example/demo-app/${APP_VERSION}/demo-app-${APP_VERSION}.jar" \
-    -O app.jar
+# Download the JAR from Nexus
+RUN wget -O app.jar \
+${NEXUS_URL}/repository/${REPOSITORY}/${GROUP_PATH}/${ARTIFACT}/${APP_VERSION}/${ARTIFACT}-${APP_VERSION}.jar
 
 EXPOSE 8082
 
 ENTRYPOINT ["java","-jar","app.jar"]
+
+
+
+
 
